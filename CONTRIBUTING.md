@@ -12,4 +12,4 @@ Preserve the Python helper's tests with Python 3.12+: python3 -m unittest discov
 
 Keep planning read-only, selected installations explicit, new destinations isolated and setup progress resumable. Recipes must declare ownership and dependencies; they may not silently replace another recipe's files.
 
-Open ready PRs after the required checks pass; the maintainer reviews them. Describe the observable problem, the resulting behavior, the exact validation you ran (a passing CI run alone is not enough) and the limits. Verify changing provider behavior with primary sources and label unperformed integration tests honestly.
+`main` is protected: every change lands through a pull request, squash merged after all CI jobs pass on an up-to-date branch and every review thread is resolved. Direct pushes, force pushes and branch deletion are blocked. Open ready PRs after the required checks pass; the maintainer reviews them. Describe the observable problem, the resulting behavior, the exact validation you ran (a passing CI run alone is not enough) and the limits. Verify changing provider behavior with primary sources and label unperformed integration tests honestly.
