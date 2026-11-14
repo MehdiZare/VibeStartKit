@@ -1,0 +1,87 @@
+# Dev box commands for Task (https://taskfile.dev). Guide: docs/remote-dev-box.md.
+#
+# Include it from your project's Taskfile.yml to get `task remote:<name>`:
+#
+#   includes:
+#     remote: ./remote-dev-box/Taskfile.yml
+#
+# or run it directly: task -t remote-dev-box/Taskfile.yml <name>
+# REMOTE_HOST picks the server name and ~/.ssh/config alias (default dev-box), as a
+# command-line or environment variable: task remote:park REMOTE_HOST=other
+version: '3'
+
+vars:
+  DIR: '{{.TASKFILE_DIR}}'
+
+tasks:
+  ssh:
+    desc: SSH into the dev box (plain login, outside tmux)
+    interactive: true
+    cmds:
+      - HOST={{.REMOTE_HOST | default "dev-box"}} "{{.DIR}}/oc-remote" ssh
+
+  opencode:
+    desc: Attach to OpenCode on the dev box (tmux session "work")
+    interactive: true
+    cmds:
+      - HOST={{.REMOTE_HOST | default "dev-box"}} "{{.DIR}}/oc-remote" tui
+
+  claude:
+    desc: Attach to Claude Code on the dev box (tmux session "work")
+    interactive: true
+    cmds:
+      - HOST={{.REMOTE_HOST | default "dev-box"}} "{{.DIR}}/oc-remote" claude
+
+  shell:
+    desc: Attach to a shell on the dev box (tmux session "work")
+    interactive: true
+    cmds:
+      - HOST={{.REMOTE_HOST | default "dev-box"}} "{{.DIR}}/oc-remote" shell
+
+  web:
+    desc: Open the dev box's OpenCode web UI in the laptop browser (SSH tunnel)
+    cmds:
+      - HOST={{.REMOTE_HOST | default "dev-box"}} "{{.DIR}}/oc-remote" web
+
+  claude-ssh:
+    desc: Print the SSH connection details for the Claude desktop app
+    cmds:
+      - HOST={{.REMOTE_HOST | default "dev-box"}} "{{.DIR}}/oc-remote" claude-ssh
+
+  sync:
+    desc: Copy agent config, skills and OpenCode/Supermemory credentials to the dev box
+    cmds:
+      - HOST={{.REMOTE_HOST | default "dev-box"}} "{{.DIR}}/sync-agent-config.sh"
+
+  update:
+    desc: Upgrade OS packages, agents and tools on the dev box to latest stable
+    cmds:
+      - scp "{{.DIR}}/update.sh" {{.REMOTE_HOST | default "dev-box"}}:update.sh
+      - ssh {{.REMOTE_HOST | default "dev-box"}} ./update.sh
+
+  status:
+    desc: Show whether the dev box exists (billing) and its snapshots
+    cmds:
+      - NAME={{.REMOTE_HOST | default "dev-box"}} "{{.DIR}}/dev-box.sh" status
+
+  park:
+    desc: Stop billing - snapshot the dev box's disk, then delete the server (asks first)
+    interactive: true
+    cmds:
+      - NAME={{.REMOTE_HOST | default "dev-box"}} "{{.DIR}}/dev-box.sh" park
+
+  unpark:
+    desc: Recreate the dev box from its newest snapshot and update ~/.ssh/config
+    cmds:
+      - NAME={{.REMOTE_HOST | default "dev-box"}} "{{.DIR}}/dev-box.sh" unpark
+
+  create:
+    desc: Create a fresh dev box from the base image (then run bootstrap.sh and sync)
+    cmds:
+      - NAME={{.REMOTE_HOST | default "dev-box"}} "{{.DIR}}/dev-box.sh" create
+
+  destroy:
+    desc: Delete the dev box WITHOUT a snapshot (asks first; unpushed work is lost)
+    interactive: true
+    cmds:
+      - NAME={{.REMOTE_HOST | default "dev-box"}} "{{.DIR}}/dev-box.sh" destroy

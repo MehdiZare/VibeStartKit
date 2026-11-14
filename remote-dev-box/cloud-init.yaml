@@ -1,0 +1,77 @@
+#cloud-config
+# Remote dev box first-boot config (Ubuntu 24.04). Guide: docs/remote-dev-box.md.
+# provision.sh substitutes __SSH_PUBLIC_KEY__. Never put secrets here:
+# user-data stays readable on the box (/var/lib/cloud/instance/user-data.txt).
+
+users:
+  - name: dev
+    groups: [sudo, docker]
+    shell: /bin/bash
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+    lock_passwd: true
+    ssh_authorized_keys:
+      - __SSH_PUBLIC_KEY__
+
+disable_root: true
+ssh_pwauth: false
+
+package_update: true
+package_upgrade: true
+packages:
+  - build-essential
+  - ca-certificates
+  - curl
+  - docker.io
+  - docker-compose-v2
+  - fail2ban
+  - git
+  - gnupg
+  - htop
+  - jq
+  - python3-pip
+  - python3-venv
+  - ripgrep
+  - tmux
+  - unattended-upgrades
+  - unzip
+
+write_files:
+  - path: /etc/ssh/sshd_config.d/90-dev-box.conf
+    content: |
+      PermitRootLogin no
+      PasswordAuthentication no
+      KbdInteractiveAuthentication no
+  # Raise inotify limits: file watchers in several worktrees exhaust the default.
+  - path: /etc/sysctl.d/90-dev-box.conf
+    content: |
+      fs.inotify.max_user_watches=1048576
+      fs.inotify.max_user_instances=1024
+
+runcmd:
+  - sysctl --system
+  - systemctl enable --now docker
+  - systemctl restart ssh
+  # Vendor apt repos, so Node 24 and gh are current; Ubuntu ships
+  # Node 18 and an old gh. corepack provides pnpm/yarn per project.
+  # Fail-closed: the ready marker is written only when every step succeeds.
+  - - bash
+    - -c
+    - |
+      set -euo pipefail
+      export DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a
+      install -d -m 0755 /etc/apt/keyrings
+      curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor --yes -o /etc/apt/keyrings/nodesource.gpg
+      echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_24.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
+      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg -o /etc/apt/keyrings/githubcli-archive-keyring.gpg
+      chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list
+      apt-get update
+      apt-get install -y nodejs gh
+      node -v | grep -q '^v24\.'
+      corepack enable
+      touch /var/lib/cloud/instance/dev-box-ready
+
+# Pick up the kernel installed by package_upgrade.
+power_state:
+  mode: reboot
+  condition: true

@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# Use OpenCode and Claude Code on the dev box from the laptop.
+# Guide: docs/remote-dev-box.md.
+#
+# Usage: oc-remote [tui]     # OpenCode TUI on the box, inside tmux window "opencode"
+#        oc-remote claude    # Claude Code on the box, inside tmux window "claude"
+#        oc-remote web       # OpenCode web UI in the laptop browser, through the SSH tunnel
+#        oc-remote shell     # plain tmux session on the box
+#        oc-remote ssh       # plain SSH login, outside tmux
+#        oc-remote claude-ssh  # print the SSH connection details for the Claude desktop app
+# Env:   HOST=dev-box  TUNNEL_HOST=<HOST>-tunnel  PORT=49375
+#        REPO_DIR=src/<this repo's folder name> (relative to the box's home;
+#        bootstrap.sh clones there)
+#
+# Everything runs in one tmux session ("work"), so closing the laptop or losing
+# the connection never stops an agent; rerun the same command to reattach.
+set -euo pipefail
+
+HOST="${HOST:-dev-box}"
+TUNNEL_HOST="${TUNNEL_HOST:-$HOST-tunnel}"
+PORT="${PORT:-49375}"
+REPO_DIR="${REPO_DIR:-src/$(basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")}"
+
+attach() {  # attach <window> <command>: open or reuse a tmux window on the box
+  local window="$1" cmd="$2"
+  ssh -t "$HOST" "export PATH=\$HOME/.local/bin:\$HOME/.opencode/bin:\$PATH; cd ~/$REPO_DIR &&
+    { tmux has-session -t work 2>/dev/null || tmux new-session -d -s work -n shell; } &&
+    { tmux list-windows -t work -F '#W' | grep -qx '$window' || tmux new-window -t work -n '$window' '$cmd'; } &&
+    tmux attach -t work \\; select-window -t '$window'"
+}
+
+case "${1:-tui}" in
+  tui) attach opencode opencode ;;
+  claude) attach claude claude ;;
+  shell) attach shell bash ;;
+  web)
+    if ! curl -fsS -o /dev/null --max-time 3 "http://127.0.0.1:$PORT/"; then
+      ssh -fN "$TUNNEL_HOST"
+    fi
+    # shellcheck disable=SC2029  # PORT is expanded locally on purpose
+    link="$(ssh "$HOST" "\$HOME/.opencode/bin/opencode pair --url http://localhost:$PORT" | grep -Eo "http://localhost:$PORT/[^[:space:]]+" | head -1)"
+    [[ -n "$link" ]] || { echo "could not get a pairing link from $HOST" >&2; exit 1; }
+    open "$link" 2>/dev/null || echo "Open within 5 minutes: $link"
+    ;;
+  ssh) exec ssh "$HOST" ;;
+  claude-ssh)
+    # Resolve the alias the way ssh does, so the printout matches ~/.ssh/config.
+    resolved="$(ssh -G "$HOST" 2>/dev/null)"
+    field() { awk -v k="$1" '$1 == k { print $2; exit }' <<< "$resolved"; }
+    claude_on_box="$(ssh "$HOST" 'b="$HOME/.local/bin/claude"; echo "$b ($("$b" --version 2>/dev/null || echo not installed))"')"
+    printf '%s\n' \
+      "Claude desktop app -> Code tab -> new session -> add an SSH connection:" \
+      "" \
+      "  Host alias      : $HOST   (from ~/.ssh/config; the app can use the alias)" \
+      "  Hostname        : $(field hostname)" \
+      "  User            : $(field user)" \
+      "  Port            : $(field port)" \
+      "  Identity file   : $(field identityfile)" \
+      "  Default folder  : /home/$(field user)/$REPO_DIR" \
+      "  Claude on box   : $claude_on_box" \
+      "" \
+      "Sign in to Claude on the box once first: task remote:claude, then /login."
+    ;;
+  *) sed -n '5,13p' "$0" >&2; exit 2 ;;
+esac

@@ -1,0 +1,23 @@
+{
+  "name": "vibestartkit",
+  "version": "0.2.0",
+  "private": true,
+  "license": "MIT",
+  "description": "Create a checked monorepo with your coding agent, selected tools and workflow skills",
+  "type": "module",
+  "bin": {
+    "vsk": "./dist/index.mjs",
+    "vibestartkit": "./dist/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=24.11.0"
+  },
+  "devDependencies": {
+    "@vibestartkit/core": "workspace:*",
+    "@vibestartkit/recipes": "workspace:*",
+    "@vibestartkit/agent-adapters": "workspace:*"
+  }
+}

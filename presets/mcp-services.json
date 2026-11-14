@@ -1,0 +1,11 @@
+{
+  "status": "Reference catalog only. This is not an active client configuration.",
+  "services": [
+    {"name":"Supermemory","endpoint":"https://mcp.supermemory.ai/mcp","authentication":"Use the provider's supported OAuth flow. Select an explicit project space; do not copy another user's namespace.","docs":"https://supermemory.ai/docs/supermemory-mcp/setup"},
+    {"name":"Render","endpoint":"https://mcp.render.com/mcp","authentication":"Use the official plugin or the supported client OAuth flow; select the intended workspace.","docs":"https://render.com/docs/mcp-server"},
+    {"name":"Vercel","endpoint":"https://mcp.vercel.com","authentication":"Use a supported client and official OAuth flow; select the intended project/team.","docs":"https://vercel.com/docs/agent-resources/vercel-mcp"},
+    {"name":"Supabase","endpoint":"https://mcp.supabase.com/mcp?project_ref=YOUR_PROJECT_REF&read_only=true","authentication":"Replace YOUR_PROJECT_REF with your own explicitly selected project and use the official authorization flow. This example requests read-only database access; verify the enabled tool groups and actual account scope.","docs":"https://supabase.com/docs/guides/ai-tools/mcp"}
+  ],
+  "github": "The core workflow uses the authenticated GitHub CLI. GitHub MCP is an optional alternative; a connector is not an additional approval to mutate issues or merge PRs.",
+  "not_mcp": "OpenRouter is a model/provider layer; OpenCode is a coding client; Kody is a reviewer; Blacksmith is CI infrastructure. Do not label all tools as MCP servers."
+}

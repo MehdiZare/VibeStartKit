@@ -1,0 +1,26 @@
+{
+  "name": "vibestartkit-workspace",
+  "version": "0.2.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@12.18.0",
+  "engines": {
+    "node": ">=24.11.0"
+  },
+  "scripts": {
+    "build": "tsdown && node tools/build-assets.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test tests-ts/*.test.ts",
+    "lint": "biome check packages tests-ts tools/*.mjs tsdown.config.ts",
+    "check": "pnpm typecheck && pnpm lint && pnpm build && pnpm test",
+    "test:generated": "node tools/smoke-generated.mjs"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.6",
+    "@types/node": "26.6.6",
+    "tsdown": "0.23.7",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  }
+}

@@ -1,0 +1,25 @@
+name: Setup problem
+description: Report a reproducible installation or first-run problem.
+title: "[Setup] "
+body:
+  - type: markdown
+    attributes:
+      value: "Omit credentials, private code, account IDs and private memory namespaces."
+  - type: input
+    id: environment
+    attributes:
+      label: Operating system, Node/pnpm (or Python) version and coding client/version
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Exact command and redacted output
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected result, actual result and smallest reproduction
+    validations:
+      required: true

@@ -1,0 +1,16 @@
+name: Guide request
+description: Request a concrete missing explanation or worked example.
+title: "[Guide] "
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: What are you trying to do?
+    validations:
+      required: true
+  - type: textarea
+    id: gap
+    attributes:
+      label: Where did the existing guide stop helping, and what would let you finish?
+    validations:
+      required: true

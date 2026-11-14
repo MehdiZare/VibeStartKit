@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "name": "my-ai-project",
+  "directory": "../../my-ai-project",
+  "preset": "ai-worker",
+  "agents": [
+    "codex"
+  ],
+  "deployment": {
+    "web": "vercel",
+    "worker": "render"
+  },
+  "integrations": {
+    "openrouter": false,
+    "kody": false,
+    "supermemory": false,
+    "blacksmith": false
+  },
+  "githubOwner": "personal",
+  "tools": [],
+  "mcp": {
+    "servers": []
+  },
+  "setup": {
+    "installDependencies": true,
+    "installHooks": true
+  }
+}

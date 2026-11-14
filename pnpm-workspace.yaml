@@ -1,0 +1,6 @@
+packages:
+  - packages/*
+verifyDepsBeforeRun: error
+allowBuilds:
+  esbuild: true
+  lefthook: true

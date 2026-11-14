@@ -1,0 +1,25 @@
+{
+  "notice": "These are optional building blocks, not one required installation bundle. The Python helper only copies this catalog. The Node CLI installs tools explicitly selected in a reviewed plan; authentication and account connections remain separate. Use current official instructions for your OS. Choose one coding client first.",
+  "tools": [
+    {"id":"git","category":"core","executables":["git"],"purpose":"Version history and isolated worktrees","docs":"https://git-scm.com/install/"},
+    {"id":"github-cli","category":"core","executables":["gh"],"purpose":"Issues, PRs, review APIs and CI evidence","docs":"https://github.com/cli/cli#installation"},
+    {"id":"ripgrep","category":"core","executables":["rg"],"purpose":"Fast local code and text search","docs":"https://github.com/BurntSushi/ripgrep#installation"},
+    {"id":"jq","category":"core","executables":["jq"],"purpose":"Select fields from structured CLI output","docs":"https://jqlang.org/download/"},
+    {"id":"uv","category":"core","executables":["uv"],"purpose":"Optional Python runtime and project tooling","docs":"https://docs.astral.sh/uv/getting-started/installation/"},
+    {"id":"bun","category":"core","executables":["bun"],"purpose":"Optional JavaScript runtime and package tooling","docs":"https://bun.sh/docs/installation"},
+    {"id":"task","category":"core","executables":["task"],"purpose":"Named, repository-defined check commands","docs":"https://taskfile.dev/docs/installation"},
+    {"id":"fnm","category":"core","executables":["fnm"],"purpose":"Optional Node version management","docs":"https://github.com/Schniz/fnm#installation"},
+    {"id":"pyenv","category":"core","executables":["pyenv"],"purpose":"Optional Python version management","docs":"https://github.com/pyenv/pyenv#installation"},
+    {"id":"claude-code","category":"agents","executables":["claude"],"purpose":"Coding client and delegated-work coordination","docs":"https://code.claude.com/docs/en/setup"},
+    {"id":"codex","category":"agents","executables":["codex"],"purpose":"Coding and review client","docs":"https://developers.openai.com/codex/cli/"},
+    {"id":"opencode","category":"agents","executables":["opencode"],"purpose":"Coding client with provider choice","docs":"https://opencode.ai/docs/"},
+    {"id":"cursor","category":"agents","executables":["cursor-agent","agent"],"purpose":"Cursor agent in the terminal","docs":"https://cursor.com/docs/cli/overview"},
+    {"id":"kody","category":"review","executables":["kodus"],"purpose":"Kodus PR review and optional local review CLI","docs":"https://github.com/kodustech/cli"},
+    {"id":"openrouter","category":"models","executables":[],"purpose":"Model/provider access; inference can incur usage charges","docs":"https://openrouter.ai/docs/quickstart"},
+    {"id":"supermemory","category":"memory","executables":[],"purpose":"Optional durable context with explicit project scope","docs":"https://supermemory.ai/docs/"},
+    {"id":"blacksmith","category":"cloud","executables":["blacksmith"],"purpose":"Optional GitHub Actions runner infrastructure","docs":"https://docs.blacksmith.sh/"},
+    {"id":"render","category":"cloud","executables":["render"],"purpose":"Application services, workers and operational inspection","docs":"https://render.com/docs/cli"},
+    {"id":"vercel","category":"cloud","executables":["vercel"],"purpose":"Web projects, previews and deployments","docs":"https://vercel.com/docs/cli"},
+    {"id":"supabase","category":"cloud","executables":["supabase"],"purpose":"Database, authentication and local project tooling","docs":"https://supabase.com/docs/guides/local-development/cli/getting-started"}
+  ]
+}

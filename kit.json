@@ -1,0 +1,13 @@
+{
+  "name": "VibeStartKit",
+  "version": "0.2.0",
+  "description": "Agent-driven monorepo setup, portable workflow skills and verified project recipes",
+  "python": ">=3.12",
+  "repository": "https://github.com/MehdiZare/VibeStartKit",
+  "skills": [
+    "project-setup",
+    "issue-closure",
+    "pr-ownership"
+  ],
+  "node": ">=24.11.0"
+}

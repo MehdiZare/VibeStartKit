@@ -1,0 +1,11 @@
+{
+  "name": "@vibestartkit/agent-adapters",
+  "version": "0.2.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "@vibestartkit/core": "workspace:*"
+  }
+}

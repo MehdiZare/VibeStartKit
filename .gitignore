@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+!.env.example
+.DS_Store
+.vibestartkit-demo/
+build/
+dist/
+node_modules/
+.pnpm-store/
+.turbo/
+*.tsbuildinfo
+*.tgz

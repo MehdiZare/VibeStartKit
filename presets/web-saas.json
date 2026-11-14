@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "name": "my-web-project",
+  "directory": "../../my-web-project",
+  "preset": "web-saas",
+  "agents": [
+    "codex"
+  ],
+  "deployment": {
+    "web": "vercel",
+    "worker": "none"
+  },
+  "integrations": {
+    "openrouter": false,
+    "kody": false,
+    "supermemory": false,
+    "blacksmith": false
+  },
+  "githubOwner": "personal",
+  "tools": [],
+  "mcp": {
+    "servers": []
+  },
+  "setup": {
+    "installDependencies": true,
+    "installHooks": true
+  }
+}
