@@ -17,7 +17,7 @@
     "test:generated": "node tools/smoke-generated.mjs"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.6.6",
+    "@biomejs/biome": "2.6.8",
     "@types/node": "26.6.6",
     "tsdown": "0.23.7",
     "tsx": "4.23.15",
